@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% block titulo%}{{titulo}}{% endblock%}
+{%block contenido%}
+{%if request.session.usuario%}
+{%include 'menu.html'%}
+{%endif%}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <h1>{{usuario.first_name}} {{usuario.last_name}} Quotes</h1><hr>
+            <!-- {%for cita in citas%}
+            <div>
+                <h3>Autor: {{cita.autor}}</h3>
+                <h4>Quote: {{cita.mensaje}}</h4>
+                <hr>
+            </div>
+            {%endfor%} -->
+
+            <hr>
+            {%for usuario in  usuario.mensajes.all%}
+            <div>
+                <h3>Autor: {{usuario.autor}}</h3>
+                <h4>Quote: {{usuario.mensaje}}</h4>
+                <h5>Fecha: {{usuario.created_at}}</h5>
+                <hr>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{%endblock%}

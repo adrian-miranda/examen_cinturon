@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+{% block titulo%}{{titulo}}{% endblock%}
+{%block contenido%}
+{%if request.session.usuario%}
+{%include 'menu.html'%}
+{%endif%}
+<div class="container">
+    <div class="row">
+        
+    </div>
+</div>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg-5">
+            <h1>Quotes</h1>
+            {%for mensaje in mensajes%}
+            <div>
+                <h3>Autor: {{mensaje.autor}}</h3>
+                <h5 class="text-light">Cita del autor: {{mensaje.mensaje}}</h5>
+                <h5>Posted by <a href="usuario/{{mensaje.usuario.id}}">{{mensaje.usuario.first_name}} {{mensaje.usuario.last_name}}</a></h5>
+                <p class="text-secondary">{{mensaje.comentarios_mensaje.all|length}} People like this</p>
+                <hr class="w-50">
+                <form action="crearComentario/{{mensaje.id}}" method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-end w-50">
+                        <button type="submit" class="btn btn-primary text-ligth w-50">Liked</button>
+                        {%if request.session.usuario.id == mensaje.usuario.id%}
+                        <a href="delete/{{mensaje.id}}" class="btn btn-danger text-ligth mx-2 w-50">Delete</a>
+                        {%endif%}
+                    </div>
+                </form>
+            </div>
+            {%endfor%}
+        </div>
+        <div class="col-lg-7">
+            <form action="crearMensaje/{{request.session.usuario.id}}" method="POST">
+                {%csrf_token%}
+                <h1>Add a Quote</h1>
+                <label for="autor">Autor</label>
+                <input type="text" name="autor" id="" class="w-100 h-100 form-control textarea my-3" rows="10">
+                <label for="quote">Quote</label>
+                <textarea name="quote" id="" class="w-100 h-100 form-control textarea" rows="5"></textarea>
+                <div class=" d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                    <button type="submit" class="btn btn-primary text-ligth">Post a message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}
